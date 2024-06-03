@@ -194,7 +194,7 @@ public class Labyrinthe {
     /**
      * deplace le monstre de manière aléatoire toutes les 0.5 secondes
      */
-    private void deplacerMonstre() {
+    public void deplacerMonstre() {
         Thread monstreMovementThread = new Thread(() -> {
             while (true) {
                 try {
