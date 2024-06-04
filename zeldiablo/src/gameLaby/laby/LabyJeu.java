@@ -21,6 +21,13 @@ public class LabyJeu implements Jeu {
         this.labyrinthe = new Labyrinthe(nom);
     }
 
+    /**
+     * Constructeur par défaut
+     */
+    public LabyJeu(){
+        this.labyrinthe = new Labyrinthe();
+    }
+
     @Override
     public void update(double deltaTime, Clavier clavier) {
         if (clavier.haut) {

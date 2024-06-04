@@ -47,6 +47,23 @@ Labyrinthe {
     private Random random;
 
     /**
+     * Pour les Tests
+     */
+    private String[] labyDefaut ={
+                "XXXXXXXXXX",
+                "X..X....XX",
+                "X........X",
+                "X.X......X",
+                "X....P...X",
+                "X......X.X",
+                "X.M......X",
+                "X.X......X",
+                "X.......XX",
+                "XXXXXXXXXX",
+
+    };
+
+    /**
      * retourne la case suivante selon une actions
      *
      * @param x      case depart
@@ -79,6 +96,51 @@ Labyrinthe {
         return res;
     }
 
+    /**
+     * Constructeur par défaut
+     */
+   public Labyrinthe() {
+
+       String[] laby =labyDefaut;
+
+       int nbLignes = laby.length;
+       this.murs = new boolean[10][10];
+       this.pj = null;
+       this.monstre = null;
+       this.random = new Random();
+       String ligne = "";
+
+       for (int i = 0; i < nbLignes; i++) {
+           int numeroLigne = i;
+           ligne = laby[i];
+
+           for (int colonne = 0; colonne < 10; colonne++) {
+               char c = ligne.charAt(colonne);
+               switch (c) {
+                   case MUR:
+                       this.murs[colonne][numeroLigne] = true;
+                       break;
+                   case VIDE:
+                       this.murs[colonne][numeroLigne] = false;
+                       break;
+                   case PJ:
+                       // pas de mur
+                       this.murs[colonne][numeroLigne] = false;
+                       // ajoute PJ
+                       this.pj = new Perso(colonne, numeroLigne);
+                       break;
+                   case MONSTRE:
+                       // pas de mur
+                       this.murs[colonne][numeroLigne] = false;
+                       // ajoute Monstre
+                       this.monstre = new Monstre(colonne, numeroLigne);
+                       break;
+                   default:
+                       throw new Error("caractere inconnu " + c);
+               }
+           }
+       }
+   }
     /**
      * charge le labyrinthe
      *
@@ -138,7 +200,6 @@ Labyrinthe {
                         throw new Error("caractere inconnu " + c);
                 }
             }
-
             // lecture
             ligne = bfRead.readLine();
             numeroLigne++;

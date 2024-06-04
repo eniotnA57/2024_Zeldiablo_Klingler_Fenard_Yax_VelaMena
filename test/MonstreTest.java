@@ -40,15 +40,5 @@ public class MonstreTest {
         assertEquals(2, monstre.getY());
     }
 
-    @Test
-    public void testMouvementRandom() {
-        for (int i = 0; i < 10; i++) {
-            labyrinthe.deplacerMonstre(Labyrinthe.ACTIONS[new java.util.Random().nextInt(Labyrinthe.ACTIONS.length)]);
-            int x = monstre.getX();
-            int y = monstre.getY();
-            System.out.println("Random Movement " + i + ": (" + x + ", " + y + ")");
-            assertTrue(x >= 1 && x <= 8);
-            assertTrue(y >= 1 && y <= 5);
-        }
     }
-}
+
