@@ -11,7 +11,8 @@ import java.util.Random;
  * <ul> un personnage (x,y) </ul>
  * <ul> un monstre (x,y) </ul>
  */
-public class Labyrinthe {
+public class
+Labyrinthe {
 
     /**
      * Constantes char
@@ -146,7 +147,6 @@ public class Labyrinthe {
         // ferme fichier
         bfRead.close();
 
-        deplacerMonstre();
     }
 
     /**
@@ -168,6 +168,8 @@ public class Labyrinthe {
             this.pj.x = suivante[0];
             this.pj.y = suivante[1];
         }
+        String actions = ACTIONS[random.nextInt(ACTIONS.length)];
+        deplacerMonstre(actions);
     }
 
     /**
@@ -177,37 +179,16 @@ public class Labyrinthe {
      * @param action une des actions possibles
      */
     public void deplacerMonstre(String action) {
-        // case courante
+
         int[] courante = {this.monstre.x, this.monstre.y};
 
-        // calcule case suivante
         int[] suivante = getSuivant(courante[0], courante[1], action);
 
-        // si c'est pas un mur et pas le personnage, on effectue le deplacement
+
         if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1])) {
-            // on met a jour monstre
             this.monstre.x = suivante[0];
             this.monstre.y = suivante[1];
         }
-    }
-
-    /**
-     * deplace le monstre de manière aléatoire toutes les 0.5 secondes
-     */
-    public void deplacerMonstre() {
-        Thread monstreMovementThread = new Thread(() -> {
-            while (true) {
-                try {
-                    Thread.sleep(500); // Pause de 0.5 seconde entre chaque mouvement (accéléré)
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                String action = ACTIONS[random.nextInt(ACTIONS.length)];
-                deplacerMonstre(action);
-            }
-        });
-        monstreMovementThread.setDaemon(true);
-        monstreMovementThread.start();
     }
 
     /**
