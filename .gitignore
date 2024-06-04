@@ -1,6 +1,3 @@
-# Ignore all .java files
-*.java
-
 # Default ignored files
 /shelf/
 /workspace.xml
