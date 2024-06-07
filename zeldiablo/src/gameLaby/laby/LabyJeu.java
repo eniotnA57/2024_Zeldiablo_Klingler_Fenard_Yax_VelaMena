@@ -10,7 +10,6 @@ import java.io.IOException;
  */
 public class LabyJeu implements Jeu {
     private final Labyrinthe labyrinthe;
-
     /**
      * Constructeur de la classe LabyJeu.
      *
@@ -41,6 +40,11 @@ public class LabyJeu implements Jeu {
         }
         if (clavier.droite) {
             this.labyrinthe.deplacerPerso(Labyrinthe.DROITE);
+        }
+        if(clavier.attaque){
+             final Combat combat=new Combat(labyrinthe);
+            combat.joueurAttaque();
+
         }
     }
 

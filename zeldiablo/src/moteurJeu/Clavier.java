@@ -5,7 +5,7 @@ import javafx.scene.input.KeyEvent;
 public class Clavier {
 
 
-    public boolean haut, bas, gauche, droite;
+    public boolean haut, bas, gauche, droite,attaque;
 
 
     public void appuyerTouche(KeyEvent event) {
@@ -50,6 +50,9 @@ public class Clavier {
             // si touche droite
             case RIGHT:
                 this.droite = true;
+                break;
+            case SPACE:
+                this.attaque = true;
                 break;
 
 
@@ -103,6 +106,11 @@ public class Clavier {
             case RIGHT:
                 this.droite = false;
                 break;
+
+                case SPACE:
+                this.attaque = false;
+                break;
+
 
         }
 

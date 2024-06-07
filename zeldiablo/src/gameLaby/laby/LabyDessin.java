@@ -7,7 +7,6 @@ import javafx.scene.paint.Color;
 import moteurJeu.DessinJeu;
 import moteurJeu.Jeu;
 
-
 public class LabyDessin implements DessinJeu {
 
     public static final int TAILLE = 50;
@@ -15,7 +14,6 @@ public class LabyDessin implements DessinJeu {
     private Image imageMstr;
     private Image imageBdf;
     private Image echelle;
-
 
     public void dessinerJeu(Jeu jeu, Canvas canvas) {
         LabyJeu labyrinthe = (LabyJeu) jeu;
@@ -32,11 +30,10 @@ public class LabyDessin implements DessinJeu {
         for (int j = 0; j < laby.getLength(); j++) {
             for (int i = 0; i < laby.getLengthY(); i++) {
                 if (laby.getMur(j, i)) {
-                    gc.drawImage(mur,j * TAILLE, i * TAILLE, TAILLE, TAILLE);
+                    gc.drawImage(mur, j * TAILLE, i * TAILLE, TAILLE, TAILLE);
                 }
             }
         }
-
 
         // escalier
         echelle = new Image("gameLaby/image/echelle.png");
@@ -48,13 +45,11 @@ public class LabyDessin implements DessinJeu {
             }
         }
 
+        // perso
         double persox = labyrinthe.getLabyrinthe().pj.getX();
         double persoy = labyrinthe.getLabyrinthe().pj.getY();
-                // perso
-
-
-
-
+        imagePrsng = new Image("gameLaby/image/personnage.png");
+        gc.drawImage(imagePrsng, persox * TAILLE, persoy * TAILLE, TAILLE, TAILLE);
 
         // monstre
         for (Monstre monstre : laby.monstres) {
@@ -62,26 +57,6 @@ public class LabyDessin implements DessinJeu {
             double monstrey = monstre.getY();
             imageMstr = new Image("gameLaby/image/dragon2.png");
             gc.drawImage(imageMstr, monstrex * TAILLE, monstrey * TAILLE, TAILLE, TAILLE);
-
-            // bdf
-            if ((monstrex - persox) == 1 && monstrey == persoy) {
-                imageBdf = new Image("gameLaby/image/bdf2.png");
-                gc.setGlobalAlpha(0.5);
-                gc.drawImage(imageBdf, monstrex * TAILLE, monstrey * TAILLE, TAILLE, TAILLE);
-                gc.setGlobalAlpha(1.0);
-            } else if (persox - monstrex == 1 && monstrey == persoy) {
-                imageBdf = new Image("gameLaby/image/bdf.png");
-                gc.setGlobalAlpha(0.5);
-                gc.drawImage(imageBdf, monstrex * TAILLE, monstrey * TAILLE, TAILLE, TAILLE);
-                gc.setGlobalAlpha(1.0);
-            }
-
-            if (persox - monstrex == 1 && monstrey == persoy) {
-                imagePrsng = new Image("gameLaby/image/personnage2.png");
-            } else {
-                imagePrsng = new Image("gameLaby/image/personnage.png");
-            }
-            gc.drawImage(imagePrsng, persox * TAILLE, persoy * TAILLE, TAILLE, TAILLE);
         }
     }
 }

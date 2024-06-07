@@ -1,18 +1,23 @@
 package gameLaby.laby;
 
-/**
- * Classe representant le monstre dans le labyrinthe
- */
 public class Monstre extends Entite {
+    private int pointsDeVie;
 
-    /**
-     * Constructeur du monstre
-     *
-     * @param dx Position selon x
-     * @param dy Position selon y
-     */
     public Monstre(int dx, int dy) {
         super(dx, dy);
+        this.pointsDeVie = 2;
     }
 
+    public int getPointsDeVie() {
+        return this.pointsDeVie;
+    }
+
+    public void takeDamage(int damage) {
+        this.pointsDeVie -= damage;
+        System.out.println("Le monstre a maintenant " + this.pointsDeVie + " points de vie.");
+    }
+
+    public boolean isAlive() {
+        return this.pointsDeVie > 0;
+    }
 }

@@ -40,7 +40,8 @@ public class Labyrinthe {
             "labySimple/laby5.txt"
     };
 
-    private int currentLevel = 0;
+    private Escalier escalier;
+    private Combat combat;
 
     /**
      *
@@ -75,7 +76,9 @@ public class Labyrinthe {
 
     public Labyrinthe() {
         try {
-            chargerLaby(labyFiles[currentLevel]);
+            chargerLaby(labyFiles[0]);
+            this.escalier = new Escalier(this, labyFiles);
+            this.combat = new Combat(this);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -88,6 +91,8 @@ public class Labyrinthe {
      */
     public Labyrinthe(String nom) throws IOException {
         chargerLaby(nom);
+        this.escalier = new Escalier(this, labyFiles);
+        this.combat = new Combat(this);
     }
 
     /**
@@ -102,9 +107,8 @@ public class Labyrinthe {
             this.pj.x = suivante[0];
             this.pj.y = suivante[1];
 
-            if (this.escaliers[suivante[0]][suivante[1]]) {
-                System.out.println("Montée à l'étage supérieur");
-                monterEtage();
+            if (this.escalier.checkAndHandleStairs(suivante[0], suivante[1])) {
+                return;
             }
         }
         for (Monstre monstre : monstres) {
@@ -129,28 +133,11 @@ public class Labyrinthe {
     }
 
     /**
-     *
-     */
-    private void monterEtage() {
-        currentLevel++;
-        if (currentLevel < labyFiles.length) {
-            try {
-                chargerLaby(labyFiles[currentLevel]);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else {
-            System.out.println("Vous avez gagné");
-            System.exit(1);
-        }
-    }
-
-    /**
      * Charge le labyrinthe
      * @param nom
      * @throws IOException
      */
-    private void chargerLaby(String nom) throws IOException {
+    public void chargerLaby(String nom) throws IOException {
         FileReader fichier = new FileReader(nom);
         BufferedReader bfRead = new BufferedReader(fichier);
 
@@ -238,7 +225,15 @@ public class Labyrinthe {
         return this.murs[x][y];
     }
 
+    public boolean getEscalier(int x, int y) {
+        return this.escaliers[x][y];
+    }
+
     public int getCurrentLevel() {
-        return currentLevel;
+        return escalier.getCurrentLevel();
+    }
+
+    public Perso getPj() {
+        return pj;
     }
 }
