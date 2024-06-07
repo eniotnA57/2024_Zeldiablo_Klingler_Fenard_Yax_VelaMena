@@ -6,19 +6,12 @@ import javafx.scene.paint.Color;
 import moteurJeu.DessinJeu;
 import moteurJeu.Jeu;
 
-/**
- * Classe LabyDessin
- */
+
 public class LabyDessin implements DessinJeu {
 
     public static final int TAILLE = 50;
 
-    /**
-     *
-     * @param jeu le jeu
-     * @param canvas canvas représentant l'état du jeu
-     */
-    @Override
+
     public void dessinerJeu(Jeu jeu, Canvas canvas) {
         LabyJeu labyrinthe = (LabyJeu) jeu;
 
@@ -39,17 +32,27 @@ public class LabyDessin implements DessinJeu {
             }
         }
 
+        // escalier
+        gc.setFill(Color.YELLOW);
+        for (int j = 0; j < laby.getLength(); j++) {
+            for (int i = 0; i < laby.getLengthY(); i++) {
+                if (laby.escaliers[j][i]) {
+                    gc.fillRect(j * TAILLE, i * TAILLE, TAILLE, TAILLE);
+                }
+            }
+        }
+
         // perso
         double persox = labyrinthe.getLabyrinthe().pj.getX();
         double persoy = labyrinthe.getLabyrinthe().pj.getY();
         gc.setFill(Color.RED);
         gc.fillOval(persox * TAILLE, persoy * TAILLE, TAILLE, TAILLE);
 
-        // monstre
-        if (labyrinthe.getLabyrinthe().monstre != null) {
-            double monstrex = labyrinthe.getLabyrinthe().monstre.getX();
-            double monstrey = labyrinthe.getLabyrinthe().monstre.getY();
-            gc.setFill(Color.rgb(127,0,255));
+        // monstres
+        gc.setFill(Color.rgb(127, 0, 255));
+        for (Monstre monstre : labyrinthe.getLabyrinthe().monstres) {
+            double monstrex = monstre.getX();
+            double monstrey = monstre.getY();
             gc.fillOval(monstrex * TAILLE, monstrey * TAILLE, TAILLE, TAILLE);
         }
     }

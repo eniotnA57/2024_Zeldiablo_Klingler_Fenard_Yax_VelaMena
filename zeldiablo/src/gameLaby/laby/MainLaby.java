@@ -10,7 +10,7 @@ public class MainLaby {
 
         try {
 
-            LabyJeu jeu = new LabyJeu("labySimple/laby1.txt");
+            LabyJeu jeu = new LabyJeu();
             MoteurJeu.setTaille( jeu.getLabyrinthe().getLength()*LabyDessin.TAILLE,  jeu.getLabyrinthe().getLengthY()*LabyDessin.TAILLE);
             LabyDessin dessin = new LabyDessin();
             MoteurJeu.launch(jeu, dessin);

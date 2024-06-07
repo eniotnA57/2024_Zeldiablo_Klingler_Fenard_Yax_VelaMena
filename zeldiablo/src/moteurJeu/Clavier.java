@@ -4,16 +4,10 @@ import javafx.scene.input.KeyEvent;
 
 public class Clavier {
 
-    /**
-     * controle appuyes
-     */
+
     public boolean haut, bas, gauche, droite;
 
-    /**
-     * stocke les commandes
-     *
-     * @param event evenement clavier
-     */
+
     public void appuyerTouche(KeyEvent event) {
 
         switch (event.getCode()) {
@@ -38,15 +32,35 @@ public class Clavier {
                 this.droite = true;
                 break;
 
+            // si touche bas
+            case DOWN:
+                this.bas = true;
+                break;
+
+            // si touche haut
+            case UP:
+                this.haut = true;
+                break;
+
+            // si touche gauche
+            case LEFT:
+                this.gauche = true;
+                break;
+
+            // si touche droite
+            case RIGHT:
+                this.droite = true;
+                break;
+
+
         }
 
     }
 
     /**
-     * stocke les commandes
-     *
-     * @param event evenement clavier
-     */
+
+     stocke les commandes*
+     @param event evenement clavier*/
     public void relacherTouche(KeyEvent event) {
 
         switch (event.getCode()) {
@@ -70,7 +84,28 @@ public class Clavier {
             case D:
                 this.droite = false;
                 break;
+            // si touche bas
+            case DOWN:
+                this.bas = false;
+                break;
+
+            // si touche haut
+            case UP:
+                this.haut = false;
+                break;
+
+            // si touche gauche
+            case LEFT:
+                this.gauche = false;
+                break;
+
+            // si touche droite
+            case RIGHT:
+                this.droite = false;
+                break;
 
         }
+
     }
+
 }

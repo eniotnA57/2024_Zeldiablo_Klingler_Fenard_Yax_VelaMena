@@ -1,4 +1,3 @@
-
 import gameLaby.laby.Labyrinthe;
 import gameLaby.laby.Monstre;
 import org.junit.Before;
@@ -16,29 +15,50 @@ public class MonstreTest {
     @Before
     public void setUp() throws IOException {
         labyrinthe = new Labyrinthe("labySimple/laby1.txt");
-        monstre = labyrinthe.monstre;
+        monstre = labyrinthe.monstres.get(0);
     }
 
     @Test
     public void testMonstreInitialisation() {
-        assertNotNull(monstre);
-        System.out.println("Initial Monstre Position: (" + monstre.getX() + ", " + monstre.getY() + ")");
-        assertEquals(5, monstre.getX());
-        assertEquals(2, monstre.getY());
+        assertNotNull("Le monstre ne doit pas être null après l'initialisation", monstre);
+        assertEquals("La position initiale en X du monstre doit être 5", 5, monstre.getX());
+        assertEquals("La position initiale en Y du monstre doit être 2", 2, monstre.getY());
     }
 
     @Test
     public void testDeplacerMonstre() {
-        labyrinthe.deplacerMonstre(Labyrinthe.BAS);
-        System.out.println("Monstre Position after moving down: (" + monstre.getX() + ", " + monstre.getY() + ")");
-        assertEquals(5, monstre.getX());
-        assertEquals(3, monstre.getY());
+        // Sauvegarde de la position initiale
+        int initialX = monstre.getX();
+        int initialY = monstre.getY();
 
-        labyrinthe.deplacerMonstre(Labyrinthe.HAUT);
-        System.out.println("Monstre Position after moving up: (" + monstre.getX() + ", " + monstre.getY() + ")");
-        assertEquals(5, monstre.getX());
-        assertEquals(2, monstre.getY());
+        // Déplacer le personnage pour déclencher le mouvement du monstre
+        labyrinthe.deplacerPerso(Labyrinthe.DROITE);
+
+        // Récupérer la nouvelle position du monstre
+        int newX = monstre.getX();
+        int newY = monstre.getY();
+
+        // Vérifier si le monstre s'est déplacé
+        boolean monstreDeplace = (initialX != newX || initialY != newY);
+        assertTrue("Le monstre aurait dû se déplacer après le mouvement du personnage", monstreDeplace);
     }
 
-    }
+    @Test
+    public void testCollisionMonstre() {
+        // Initialiser la position de départ
+        int initialX = monstre.getX();
+        int initialY = monstre.getY();
+        labyrinthe.deplacerPerso(Labyrinthe.DROITE);
 
+        // Déplacer le personnage pour essayer de provoquer un mouvement du monstre dans un mur
+        labyrinthe.deplacerPerso(Labyrinthe.DROITE);
+
+        // Vérifier que le monstre n'a pas traversé un mur
+        int postMoveX = monstre.getX();
+        int postMoveY = monstre.getY();
+
+        boolean collisionDetected = labyrinthe.getMur(postMoveX, postMoveY);
+
+        assertFalse("Le monstre ne doit pas traverser un mur", collisionDetected);
+    }
+}
