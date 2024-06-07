@@ -1,0 +1,28 @@
+bilan 
+
+pour la gestion multi-étage:
+
+-modification de la classe LabyDessin 
+	. ajout de 3 nouveau labyrinthes 
+
+-modification de la classe LabyDessin 
+	. rajouter un escalier 
+
+-modification de la classe Labyrinthe 
+	. nouveaux attributs:
+		.public boolean[][] escaliers;
+		.private int currentLevel = 0;
+	.modification de la méthode deplacerPerso(): pour introduire l'escalier
+	. ajout de la méthode monterEtage()
+	. ajout de la méthode chargerLaby()
+
+-classe Test : ajout d'un test qui vérifie les nouvelles méthodes.
+
+
+pour les sprites:
+
+-Modification de la classe LabyDessin
+	. remplacement des formes par les images
+ 
+-Modification de la classe Labyrinthe 
+	. modification de la méthode déplacerMonstre() pour gestion de la collision entre les monstres

@@ -1,0 +1,173 @@
+plantuml
+
+
+diagramme de séquence de la gestion du labyrinthe multi-étage
+
+@startuml
+actor Joueur
+participant Labyrinthe
+participant Perso as pj
+
+Joueur -> Labyrinthe: deplacerPerso(action)
+activate Labyrinthe
+
+Labyrinthe -> pj: obtenir position actuelle
+pj -> Labyrinthe: retourne (pj.x, pj.y)
+
+Labyrinthe -> Labyrinthe: getSuivant(courante[0], courante[1], action)
+Labyrinthe -> Labyrinthe: retourne suivante(x, y)
+
+alt !(this.escaliers[suivante[0][suivante[1]])
+    Labyrinthe -> pj: MonterEtage()
+
+end
+
+pj -> Labyrinthe
+
+deactivate Labyrinthe
+@enduml
+
+diagramme de classe avant conception 
+
+@startuml
+
+class Labyrinthe {
+
+-murs :boolean[][] 
+-pj: Perso 
+-monstre :Monstre 
+-random :Random 
+<color:Green> +static final ESCALIER : char</color>
++ static final MUR: char 
++ static final PJ: char 
++ static final MONSTRE: char 
++ static final VIDE: char 
++ static final HAUT: String 
++ static final BAS: String 
++ static final GAUCHE: String 
++ static final DROITE: String 
++ static final ACTIONS: String[] 
++ Labyrinthe(String nom)
++ Labyrinthe()
++ deplacerPerso(String action):
++ deplacerMonstre(String action):
++ etreFini(): boolean 
++ getLengthY():int 
++ getLength():int 
++ getMur(int x, int y): boolean 
++ static getSuivant(int x, int y, String action): Labyrinthe 
++ deplacerMonstre():
+<color:Green> + escalier ():</color>
+}
+
+class Monstre {
+  + Monstre(int dx, int dy)
+}
+
+class Perso {
+  + int x
+  + int y
+  + Perso(int x, int y)
+  + int getX()
+  + int getY()
+}
+
+class LabyJeu {
++ LabyJeu (String nom)
++ LabyJeu ()
++ getLabyrinthe() : Labyrinthe 
+}
+
+Labyrinthe "1" -- "1" Monstre : monstre
+Labyrinthe "1" -- "1" Perso : pj
+@enduml
+
+
+diagramme de classe final
+
+
+@startuml
+
+class Labyrinthe {
+
+-murs :boolean[][] 
+-pj: Perso 
+-monstre :Monstre 
+-random :Random 
+<color:Red> +static final ESCALIER : char</color>
++ static final MUR: char 
++ static final PJ: char 
++ static final MONSTRE: char 
++ static final VIDE: char 
++ static final HAUT: String 
++ static final BAS: String 
++ static final GAUCHE: String 
++ static final DROITE: String 
++ static final ACTIONS: String[]
+<color:Red> +pj : Perso</color>
+<colr:Red> +monstre: List<Monstre></color>
+<color:Red> +murs : boolean[][]</color>
+<color:Red> +escaliers : boolean[][]</color>
+<color:Red> - labyFiles : String[]</color>
+<color:Red> -currentLevel : int</color>
+ 
++ Labyrinthe(String nom)
++ Labyrinthe()
++ deplacerPerso(String action):
++ deplacerMonstre(String action):
++ etreFini(): boolean 
++ getLengthY():int 
++ getLength():int 
++ getMur(int x, int y): boolean 
++ static getSuivant(int x, int y, String action): Labyrinthe 
++ deplacerMonstre():
+<color:Red> + monterEtage ():</color>
+<color:Red> + chargerLaby (String):</color>
+}
+
+class Monstre {
+  + Monstre(int dx, int dy)
+}
+
+class Perso {
+  + int x
+  + int y
+  + Perso(int x, int y)
+  + int getX()
+  + int getY()
+}
+
+class LabyJeu {
++ LabyJeu (String nom)
++ LabyJeu ()
++ getLabyrinthe() : Labyrinthe 
+}
+
+Labyrinthe "1" -- "1" Monstre : monstre
+Labyrinthe "1" -- "1" Perso : pj
+@enduml
+
+diagramme de séquence de monterEtage()
+
+@startuml
+participant Labyrinthe
+participant System as "System.out"
+participant IOException as "IOException"
+
+Labyrinthe -> Labyrinthe: monterEtage()
+activate Labyrinthe
+
+Labyrinthe -> Labyrinthe: ++currentLevel
+alt currentLevel < labyFiles.length
+    Labyrinthe -> Labyrinthe: chargerLaby(labyFiles[currentLevel])
+    activate Labyrinthe
+    Labyrinthe -> IOException: catch (IOException)
+    deactivate Labyrinthe
+    IOException -> Labyrinthe: printStackTrace()
+else
+    Labyrinthe -> System: println("Vous avez gagné")
+    System -> Labyrinthe: System.exit(1)
+end
+
+deactivate Labyrinthe
+@enduml
