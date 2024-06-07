@@ -9,7 +9,8 @@ public class Perso {
     /**
      * position du personnage
      */
-    int x, y;
+    public int x;
+    public int y;
 
     /**
      * constructeur

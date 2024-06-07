@@ -203,7 +203,7 @@ public class Labyrinthe {
         int[] courante = {monstre.x, monstre.y};
         int[] suivante = getSuivant(courante[0], courante[1], action);
 
-        if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1])) {
+        if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1]) && !estOccupe(suivante[0], suivante[1])) {
             monstre.x = suivante[0];
             monstre.y = suivante[1];
         }
@@ -236,5 +236,9 @@ public class Labyrinthe {
 
     public boolean getMur(int x, int y) {
         return this.murs[x][y];
+    }
+
+    public int getCurrentLevel() {
+        return currentLevel;
     }
 }
