@@ -1,0 +1,74 @@
+plantuml
+
+diagragramme de séquence pour joueurAttaque()
+
+@startuml
+participant Joueur
+participant Labyrinthe
+participant Monstre
+participant "List<Monstre>" as Monstres
+participant System
+
+Joueur -> Labyrinthe : monstres
+activate Labyrinthe
+
+Labyrinthe -> Monstres : iterate
+activate Monstres
+
+loop for each Monstre
+    Joueur -> Joueur : isAdjacent(monstre.x, monstre.y, labyrinthe.pj.x, labyrinthe.pj.y)
+    alt is Adjacent
+        Joueur -> Monstre : takeDamage(1)
+        activate Monstre
+        Monstre --> Joueur : return
+
+        Joueur -> System : println("Le joueur attaque un monstre! Le monstre perd 1 point de vie.")
+        activate System
+        System --> Joueur : return
+
+        Joueur -> Monstre : isAlive()
+        Monstre --> Joueur : return
+        alt not isAlive
+            Joueur -> Monstres : add(monstre)
+            Joueur -> System : println("Un monstre a été tué!")
+            System --> Joueur : return
+            Joueur -> System : println("Le héros récupère 2 points de vie")
+            System --> Joueur : return
+            Joueur -> Joueur : takeDamage(-2)
+        end
+    end
+end
+
+deactivate Monstre
+deactivate Monstres
+deactivate Labyrinthe
+
+Joueur -> Monstres : remove all in monstresToRemove
+activate Monstres
+Monstres --> Joueur : return
+deactivate Monstres
+
+@enduml
+
+
+diagramme de séquence pour monstreAttaque()
+
+@startuml
+participant Monstre
+participant Labyrinthe
+participant Joueur as "Perso"
+participant System
+
+Monstre -> Labyrinthe : getJoueur()
+activate Labyrinthe
+Labyrinthe -> Perso : takeDamage(1)
+activate Perso
+Perso --> Labyrinthe : return
+deactivate Perso
+deactivate Labyrinthe
+
+Monstre -> System : println("Le monstre attaque! Le héros perd 1 point de vie.")
+activate System
+System --> Monstre : return
+deactivate System
+@enduml
