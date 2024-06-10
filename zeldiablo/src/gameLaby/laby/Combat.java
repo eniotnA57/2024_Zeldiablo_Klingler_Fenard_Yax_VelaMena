@@ -1,9 +1,13 @@
 package gameLaby.laby;
 
+import javafx.scene.canvas.Canvas;
+import moteurJeu.DessinJeu;
+import moteurJeu.Jeu;
+
 import java.util.ArrayList;
 import java.util.List;
 
-public class Combat {
+public class Combat{
 
     private Labyrinthe labyrinthe;
 

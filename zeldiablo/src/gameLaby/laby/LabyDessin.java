@@ -48,7 +48,19 @@ public class LabyDessin implements DessinJeu {
         // perso
         double persox = labyrinthe.getLabyrinthe().pj.getX();
         double persoy = labyrinthe.getLabyrinthe().pj.getY();
+
         imagePrsng = new Image("gameLaby/image/personnage.png");
+
+        for (Monstre monstre : laby.monstres) {
+            double monstrex = monstre.getX();
+            double monstrey = monstre.getY();
+            if (persox - monstrex == 1 && monstrey == persoy) {
+                imagePrsng = new Image("gameLaby/image/personnage2.png");
+            }
+
+        }
+
+
         gc.drawImage(imagePrsng, persox * TAILLE, persoy * TAILLE, TAILLE, TAILLE);
 
         // monstre
@@ -57,6 +69,9 @@ public class LabyDessin implements DessinJeu {
             double monstrey = monstre.getY();
             imageMstr = new Image("gameLaby/image/dragon2.png");
             gc.drawImage(imageMstr, monstrex * TAILLE, monstrey * TAILLE, TAILLE, TAILLE);
+
         }
+
+
     }
 }
