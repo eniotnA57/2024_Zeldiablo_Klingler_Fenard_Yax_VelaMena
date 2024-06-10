@@ -7,14 +7,24 @@ import javafx.scene.paint.Color;
 import moteurJeu.DessinJeu;
 import moteurJeu.Jeu;
 
+/**
+ * Classe pour dessiner le jeu du labyrinthe.
+ */
 public class LabyDessin implements DessinJeu {
 
-    public static final int TAILLE = 50;
+    public static int TAILLE = 50;
+
     private Image imagePrsng;
     private Image imageMstr;
     private Image imageBdf;
     private Image echelle;
+    private Image amulette;
 
+    /**
+     * Dessine l'état actuel du jeu sur le canvas.
+     * @param jeu L'état actuel du jeu.
+     * @param canvas Le canvas sur lequel dessiner.
+     */
     public void dessinerJeu(Jeu jeu, Canvas canvas) {
         LabyJeu labyrinthe = (LabyJeu) jeu;
 
@@ -39,28 +49,26 @@ public class LabyDessin implements DessinJeu {
         echelle = new Image("gameLaby/image/echelle.png");
         for (int j = 0; j < laby.getLength(); j++) {
             for (int i = 0; i < laby.getLengthY(); i++) {
-                if (laby.escaliers[j][i]) {
+                if (laby.getEscalier(j, i)) {
                     gc.drawImage(echelle, j * TAILLE, i * TAILLE, TAILLE, TAILLE);
                 }
             }
         }
 
-        // perso
-        double persox = labyrinthe.getLabyrinthe().pj.getX();
-        double persoy = labyrinthe.getLabyrinthe().pj.getY();
-
-        imagePrsng = new Image("gameLaby/image/personnage.png");
-
-        for (Monstre monstre : laby.monstres) {
-            double monstrex = monstre.getX();
-            double monstrey = monstre.getY();
-            if (persox - monstrex == 1 && monstrey == persoy) {
-                imagePrsng = new Image("gameLaby/image/personnage2.png");
+        // amulette
+        amulette = new Image("gameLaby/image/receptacle.png");
+        for (int j = 0; j < laby.getLength(); j++) {
+            for (int i = 0; i < laby.getLengthY(); i++) {
+                if (laby.getAmulette(j, i)) {
+                    gc.drawImage(amulette, j * TAILLE, i * TAILLE, TAILLE, TAILLE);
+                }
             }
-
         }
 
-
+        // perso
+        double persox = labyrinthe.getLabyrinthe().getPj().getX();
+        double persoy = labyrinthe.getLabyrinthe().getPj().getY();
+        imagePrsng = new Image("gameLaby/image/personnage.png");
         gc.drawImage(imagePrsng, persox * TAILLE, persoy * TAILLE, TAILLE, TAILLE);
 
         // monstre
@@ -69,9 +77,6 @@ public class LabyDessin implements DessinJeu {
             double monstrey = monstre.getY();
             imageMstr = new Image("gameLaby/image/dragon2.png");
             gc.drawImage(imageMstr, monstrex * TAILLE, monstrey * TAILLE, TAILLE, TAILLE);
-
         }
-
-
     }
 }

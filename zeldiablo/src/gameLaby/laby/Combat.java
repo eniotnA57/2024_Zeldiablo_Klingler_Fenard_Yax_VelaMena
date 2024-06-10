@@ -1,25 +1,35 @@
 package gameLaby.laby;
 
-import javafx.scene.canvas.Canvas;
-import moteurJeu.DessinJeu;
-import moteurJeu.Jeu;
-
 import java.util.ArrayList;
 import java.util.List;
 
-public class Combat{
+/**
+ * Gère les combats entre le joueur et les monstres dans le labyrinthe.
+ */
+public class Combat {
 
     private Labyrinthe labyrinthe;
 
+    /**
+     * Constructeur de la classe Combat.
+     * @param labyrinthe Le labyrinthe où les combats ont lieu.
+     */
     public Combat(Labyrinthe labyrinthe) {
         this.labyrinthe = labyrinthe;
     }
 
+    /**
+     * Fait attaquer un monstre au joueur.
+     * @param monstre Le monstre qui attaque.
+     */
     public void monstreAttaque(Monstre monstre) {
         labyrinthe.pj.takeDamage(1);
         System.out.println("Le monstre attaque! Le héros perd 1 point de vie.");
     }
 
+    /**
+     * Fait attaquer le joueur aux monstres adjacents.
+     */
     public void joueurAttaque() {
         boolean attacked = false;
         List<Monstre> monstresToRemove = new ArrayList<>();
@@ -32,8 +42,10 @@ public class Combat{
                 if (!monstre.isAlive()) {
                     monstresToRemove.add(monstre);
                     System.out.println("Un monstre a été tué!");
-                    System.out.println("Le héros récupère 2 points de vie");
-                    labyrinthe.pj.takeDamage(-2);
+                    if (Math.random() > 0.6666) {
+                        System.out.println("Le héros récupère 2 points de vie");
+                        labyrinthe.pj.takeDamage(-2);
+                    }
                 }
             }
         }
@@ -47,6 +59,14 @@ public class Combat{
         }
     }
 
+    /**
+     * Vérifie si deux positions sont adjacentes.
+     * @param x1 Coordonnée x de la première position.
+     * @param y1 Coordonnée y de la première position.
+     * @param x2 Coordonnée x de la deuxième position.
+     * @param y2 Coordonnée y de la deuxième position.
+     * @return true si les positions sont adjacentes, false sinon.
+     */
     private boolean isAdjacent(int x1, int y1, int x2, int y2) {
         return (Math.abs(x1 - x2) + Math.abs(y1 - y2)) == 1;
     }
