@@ -107,4 +107,10 @@ public class Perso {
             }
         }
     }
+
+    public void setX(int i) {
+    }
+
+    public void setY(int i) {
+    }
 }

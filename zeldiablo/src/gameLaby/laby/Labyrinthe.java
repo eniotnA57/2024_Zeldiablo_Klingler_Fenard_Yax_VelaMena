@@ -55,6 +55,10 @@ public class Labyrinthe {
         }
     }
 
+    public Labyrinthe(String labyString) throws IOException {
+        chargerLaby(labyString);
+    }
+
     /**
      * Constructeur avec des fichiers de labyrinthe spécifiques.
      * @param labyFiles Tableau de chaînes représentant les niveaux du labyrinthe.
