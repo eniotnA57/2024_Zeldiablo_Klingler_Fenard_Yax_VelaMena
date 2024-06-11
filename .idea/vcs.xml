@@ -2,11 +2,5 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
-<<<<<<< HEAD
-    <mapping directory="$PROJECT_DIR$/2024_Zeldiablo_Klingler_Fenard_Yax_VelaMena" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/2024_Zeldiablo_Klingler_Fenard_Yax_VelaMena-4" vcs="Git" />
-=======
->>>>>>> e07f65e325925edf55ab7f1e0ffeec47338593f4
-    <mapping directory="$PROJECT_DIR$/zeldiablo/2024_Zeldiablo_Klingler_Fenard_Yax_VelaMena" vcs="Git" />
   </component>
 </project>
