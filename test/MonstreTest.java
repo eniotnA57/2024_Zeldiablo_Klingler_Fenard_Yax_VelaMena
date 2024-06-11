@@ -14,7 +14,10 @@ public class MonstreTest {
 
     @Before
     public void setUp() throws IOException {
-        labyrinthe = new Labyrinthe("labySimple/laby1.txt");
+        labyrinthe = new Labyrinthe();
+        if (labyrinthe.monstres.isEmpty()) {
+            fail("Aucun monstre chargé dans le labyrinthe");
+        }
         monstre = labyrinthe.monstres.get(0);
     }
 
@@ -27,38 +30,30 @@ public class MonstreTest {
 
     @Test
     public void testDeplacerMonstre() {
-        // Sauvegarde de la position initiale
         int initialX = monstre.getX();
         int initialY = monstre.getY();
 
-        // Déplacer le personnage pour déclencher le mouvement du monstre
-        labyrinthe.deplacerPerso(Labyrinthe.DROITE);
+        labyrinthe.deplacerMonstre(monstre, Integer.parseInt(Labyrinthe.DROITE));
 
-        // Récupérer la nouvelle position du monstre
         int newX = monstre.getX();
         int newY = monstre.getY();
 
-        // Vérifier si le monstre s'est déplacé
         boolean monstreDeplace = (initialX != newX || initialY != newY);
-        assertTrue("Le monstre aurait dû se déplacer après le mouvement du personnage", monstreDeplace);
+        assertTrue("Le monstre aurait dû se déplacer", monstreDeplace);
     }
+
 
     @Test
     public void testCollisionMonstre() {
-        // Initialiser la position de départ
+        // Déplacer le monstre directement pour tester la collision
         int initialX = monstre.getX();
         int initialY = monstre.getY();
-        labyrinthe.deplacerPerso(Labyrinthe.DROITE);
 
-        // Déplacer le personnage pour essayer de provoquer un mouvement du monstre dans un mur
-        labyrinthe.deplacerPerso(Labyrinthe.DROITE);
+        // Tentative de déplacer le monstre vers un mur
+        labyrinthe.deplacerMonstre(monstre, Integer.parseInt(Labyrinthe.DROITE)); // Assurez-vous que cette méthode est implémentée
 
         // Vérifier que le monstre n'a pas traversé un mur
-        int postMoveX = monstre.getX();
-        int postMoveY = monstre.getY();
-
-        boolean collisionDetected = labyrinthe.getMur(postMoveX, postMoveY);
-
-        assertFalse("Le monstre ne doit pas traverser un mur", collisionDetected);
+        assertEquals("Le monstre ne doit pas traverser un mur", initialX, monstre.getX());
+        assertEquals("La position Y du monstre ne doit pas avoir changé", initialY, monstre.getY());
     }
 }

@@ -1,19 +1,17 @@
 package gameLaby.laby;
 
 import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
-/**
- * Classe Labyrinthe
- */
 
 public class Labyrinthe {
 
     public static final char MUR = 'X';
+    public static final char AMULETTE = 'A';
     public static final char PJ = 'P';
     public static final char MONSTRE = 'M';
     public static final char VIDE = '.';
@@ -23,60 +21,27 @@ public class Labyrinthe {
     public static final String BAS = "Bas";
     public static final String GAUCHE = "Gauche";
     public static final String DROITE = "Droite";
-
     public static final String[] ACTIONS = {HAUT, BAS, GAUCHE, DROITE};
 
     public Perso pj;
     public List<Monstre> monstres;
-
     public boolean[][] murs;
     public boolean[][] escaliers;
+    public boolean[][] amulettes;
 
-    private Random random;
+    public Random random;
+    private String[] labyFiles;
+    public Escalier escalier;
+    public Combat combat;
+    private int currentLevel; // Niveau courant du labyrinthe
 
-    private String[] labyFiles = {
-            "labySimple/laby3.txt",
-            "labySimple/laby4.txt",
-            "labySimple/laby5.txt"
-    };
-
-    private Escalier escalier;
-    private Combat combat;
-
-    /**
-     *
-     * @param x
-     * @param y
-     * @param action
-     * @return
-     */
-    static int[] getSuivant(int x, int y, String action) {
-        switch (action) {
-            case HAUT:
-                y--;
-                break;
-            case BAS:
-                y++;
-                break;
-            case DROITE:
-                x++;
-                break;
-            case GAUCHE:
-                x--;
-                break;
-            default:
-                throw new Error("action inconnue");
-        }
-        return new int[]{x, y};
-    }
-
-    /**
-     * constructeur par défaut
-     */
+    private int savedHealth = 10;
 
     public Labyrinthe() {
         try {
-            chargerLaby(labyFiles[0]);
+            labyFiles = LabyGeneration.genererLabyrinthe(MainLaby.ligne, MainLaby.colonne, MainLaby.etages);
+            currentLevel = 0; // Initialiser le niveau courant
+            chargerLaby(labyFiles[currentLevel]);
             this.escalier = new Escalier(this, labyFiles);
             this.combat = new Combat(this);
         } catch (IOException e) {
@@ -84,46 +49,27 @@ public class Labyrinthe {
         }
     }
 
-    /**
-     * Constructeur avec un fichier
-     * @param nom
-     * @throws IOException
-     */
-    public Labyrinthe(String nom) throws IOException {
-        chargerLaby(nom);
+    public Labyrinthe(String[] labyFiles) throws IOException {
+        this.labyFiles = labyFiles;
+        currentLevel = 0; // Initialiser le niveau courant
+        chargerLaby(labyFiles[currentLevel]);
         this.escalier = new Escalier(this, labyFiles);
         this.combat = new Combat(this);
     }
 
-    /**
-     * deplace le perso
-     * @param action
-     */
-    public void deplacerPerso(String action) {
-        int[] courante = {this.pj.x, this.pj.y};
-        int[] suivante = getSuivant(courante[0], courante[1], action);
-
-        if (!this.murs[suivante[0]][suivante[1]] && !estOccupe(suivante[0], suivante[1])) {
-            this.pj.x = suivante[0];
-            this.pj.y = suivante[1];
-
-            if (this.escalier.checkAndHandleStairs(suivante[0], suivante[1])) {
-                return;
-            }
-        }
-        for (Monstre monstre : monstres) {
-            String actions = ACTIONS[random.nextInt(ACTIONS.length)];
-            deplacerMonstre(monstre, actions);
+    public void savePlayerHealth() {
+        if (pj != null) {
+            savedHealth = pj.getPointsDeVie();
         }
     }
 
-    /**
-     *
-     * @param x
-     * @param y
-     * @return
-     */
-    private boolean estOccupe(int x, int y) {
+    public void restorePlayerHealth() {
+        if (pj != null) {
+            pj.setPointsDeVie(savedHealth);
+        }
+    }
+
+    public boolean estOccupe(int x, int y) {
         for (Monstre monstre : monstres) {
             if (monstre.x == x && monstre.y == y) {
                 return true;
@@ -132,20 +78,20 @@ public class Labyrinthe {
         return false;
     }
 
-    /**
-     * Charge le labyrinthe
-     * @param nom
-     * @throws IOException
-     */
-    public void chargerLaby(String nom) throws IOException {
-        FileReader fichier = new FileReader(nom);
-        BufferedReader bfRead = new BufferedReader(fichier);
+    public boolean estAdjacente(int x1, int y1, int x2, int y2) {
+        return (Math.abs(x1 - x2) == 1 && y1 == y2) || (Math.abs(y1 - y2) == 1 && x1 == x2);
+    }
+
+    public void chargerLaby(String laby) throws IOException {
+        savePlayerHealth(); // Sauvegarder les points de vie avant de charger le nouveau niveau
+        BufferedReader bfRead = new BufferedReader(new StringReader(laby));
 
         int nbLignes = Integer.parseInt(bfRead.readLine());
         int nbColonnes = Integer.parseInt(bfRead.readLine());
 
         this.murs = new boolean[nbColonnes][nbLignes];
         this.escaliers = new boolean[nbColonnes][nbLignes];
+        this.amulettes = new boolean[nbColonnes][nbLignes];
         this.pj = null;
         this.monstres = new ArrayList<>();
         this.random = new Random();
@@ -165,15 +111,20 @@ public class Labyrinthe {
                         break;
                     case PJ:
                         this.murs[colonne][numeroLigne] = false;
-                        this.pj = new Perso(colonne, numeroLigne);
+                        this.pj = new Perso(colonne, numeroLigne, this);
                         break;
                     case MONSTRE:
                         this.murs[colonne][numeroLigne] = false;
-                        this.monstres.add(new Monstre(colonne, numeroLigne));
+                        Monstre monstre = new Monstre(colonne, numeroLigne, this);
+                        this.monstres.add(monstre);
                         break;
                     case ESCALIER:
                         this.murs[colonne][numeroLigne] = false;
                         this.escaliers[colonne][numeroLigne] = true;
+                        break;
+                    case AMULETTE:
+                        this.murs[colonne][numeroLigne] = false;
+                        this.amulettes[colonne][numeroLigne] = true;
                         break;
                     default:
                         throw new Error("caractere inconnu " + c);
@@ -184,38 +135,16 @@ public class Labyrinthe {
         }
 
         bfRead.close();
+        restorePlayerHealth();
     }
 
-    public void deplacerMonstre(Monstre monstre, String action) {
-        int[] courante = {monstre.x, monstre.y};
-        int[] suivante = getSuivant(courante[0], courante[1], action);
-
-        if (!this.murs[suivante[0]][suivante[1]] && (this.pj.x != suivante[0] || this.pj.y != suivante[1]) && !estOccupe(suivante[0], suivante[1])) {
-            monstre.x = suivante[0];
-            monstre.y = suivante[1];
-        }
-    }
-
-    /**
-     *
-     * @return
-     */
     public boolean etreFini() {
         return false;
     }
 
-    /**
-     *
-     * @return
-     */
-
     public int getLengthY() {
         return murs[0].length;
     }
-
-    /**
-     * @return
-     */
 
     public int getLength() {
         return murs.length;
@@ -229,11 +158,111 @@ public class Labyrinthe {
         return this.escaliers[x][y];
     }
 
+    public boolean getAmulette(int x, int y) {
+        return this.amulettes[x][y];
+    }
+
     public int getCurrentLevel() {
-        return escalier.getCurrentLevel();
+        return currentLevel;
+    }
+
+    public static int[] getSuivant(int x, int y, String action) {
+        switch (action) {
+            case HAUT:
+                y--;
+                break;
+            case BAS:
+                y++;
+                break;
+            case DROITE:
+                x++;
+                break;
+            case GAUCHE:
+                x--;
+                break;
+            default:
+                throw new Error("action inconnue");
+        }
+        return new int[]{x, y};
     }
 
     public Perso getPj() {
         return pj;
+    }
+
+    public void deplacerPerso(String direction) {
+        int[] newPosition = getSuivant(pj.getX(), pj.getY(), direction);
+
+        // Vérifier les limites du labyrinthe et les obstacles
+        if (newPosition[0] >= 0 && newPosition[0] < getLength() && newPosition[1] >= 0 && newPosition[1] < getLengthY()) {
+            if (escaliers[newPosition[0]][newPosition[1]]) {
+                monterEtage();
+            } else if (!murs[newPosition[0]][newPosition[1]] && !estOccupe(newPosition[0], newPosition[1])) {
+                pj.setX(newPosition[0]);
+                pj.setY(newPosition[1]);
+            }
+        }
+
+        // Mettre à jour le combat après le déplacement
+        updateCombat();
+    }
+
+    private void monterEtage() {
+        if (currentLevel < labyFiles.length - 1) {
+            currentLevel++;
+            try {
+                chargerLaby(labyFiles[currentLevel]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Vous avez atteint le dernier niveau !");
+        }
+    }
+
+    public void updateCombat() {
+        Iterator<Monstre> iterator = monstres.iterator();
+        while (iterator.hasNext()) {
+            Monstre monstre = iterator.next();
+            if (!monstre.isAlive()) {
+                iterator.remove();
+                System.out.println("Un monstre a été tué!");
+            }
+        }
+
+        // Exécute d'autres logiques de combat, par exemple, vérifier les attaques des monstres
+        for (Monstre monstre : monstres) {
+            if (estAdjacente(monstre.x, monstre.y, pj.getX(), pj.getY())) {
+                combat.monstreAttaque(monstre);
+            } else {
+                String actionAleatoire = ACTIONS[random.nextInt(ACTIONS.length)];
+                monstre.deplacerMonstre(actionAleatoire);
+            }
+        }
+    }
+
+
+    // Dans la classe Labyrinthe
+
+    public void deplacerMonstre(Monstre monstre, int direction) {
+        int newX = monstre.getX();
+        int newY = monstre.getY();
+
+        switch (direction) {
+            case 0:
+                newX--;
+                break;
+            case 1:
+                newX++;
+                break;
+            case 2:
+                newY--;
+                break;
+            case 3:
+                newY++;
+                break;
+            default:
+                break;
+        }
     }
 }

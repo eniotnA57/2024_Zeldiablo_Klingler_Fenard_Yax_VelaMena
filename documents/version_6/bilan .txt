@@ -1,0 +1,17 @@
+bilan 
+
+Pour la génération automatique de Labyrinthe:
+
+-création d'une nouvelle classe LabyGeneration
+	.ajout méthode genererLabyrinthe()
+	.ajout méthode placeAmulette()
+
+pour les amulettes:
+
+-crétion d'une nouvelle classe Amulette:
+	.ajout méthode récupérerAmulette
+
+Ajout graphisme :
+
+- Ajout sprite pour combat : boule de feu
+
