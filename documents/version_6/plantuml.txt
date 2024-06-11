@@ -1,0 +1,162 @@
+plantuml
+
+
+genererLabyrinthe():
+
+@startuml
+actor User
+
+participant "LabyGeneration" as LG
+participant "Random" as R
+participant "char[][] grid" as Grid
+
+User -> LG : genererLabyrinthe(rows, cols, etages)
+activate LG
+
+LG -> R : new Random()
+activate R
+deactivate R
+
+alt Adjustements
+    LG -> LG : Adjust monstreMax, maxMurs
+end
+
+loop pour chaque etage
+    LG -> R : Calculer positions initiales
+
+    loop coordonnées égales
+        LG -> R : Recalculer ligneEchelle, colonneEchelle
+    end
+
+    LG -> Grid : new char[rows][cols]
+    activate Grid
+
+    LG -> Grid : Placer bordures, personnage, échelle
+
+    loop Placement des murs
+        LG -> Grid : Placer mur
+    end
+
+    loop Placement des monstres
+        LG -> Grid : Placer monstre
+    end
+
+    LG -> LG : Placer amulettes
+
+    LG -> LG : Construire labyrinthe
+
+    LG -> LG : Mettre à jour positions
+end
+
+return labys
+
+deactivate LG
+@enduml
+
+
+recupererAmulette():
+
+@startuml
+
+actor User
+
+participant "LabyGeneration" as LG
+participant "Random" as R
+participant "StringBuilder" as SB
+participant "char[][] grid" as Grid
+
+User -> LG : genererLabyrinthe(rows, cols, etages)
+activate LG
+
+LG -> R : new Random()
+activate R
+deactivate R
+
+alt colonne < 15
+    LG -> LG : monstreMax = colonne * ligne / 10
+end
+
+alt ligne < 10
+    LG -> LG : monstreMax = colonne * ligne / 10
+    LG -> LG : maxMurs = colonne * ligne / 2
+end
+
+loop for each etage
+    LG -> SB : new StringBuilder()
+    activate SB
+    
+    LG -> LG : lignePerso = rand.nextInt(rows - 2) + 1
+    LG -> LG : colonnePerso = rand.nextInt(cols - 2) + 1
+    LG -> LG : ligneEchelle = rand.nextInt(rows - 2) + 1
+    LG -> LG : colonneEchelle = rand.nextInt(cols - 2) + 1
+    
+    alt lignePerso == ligneEchelle && colonnePerso == colonneEchelle
+        LG -> LG : ligneEchelle = rand.nextInt(rows - 2) + 1
+        LG -> LG : colonneEchelle = rand.nextInt(cols - 2) + 1
+    end
+
+    LG -> Grid : new char[rows][cols]
+    activate Grid
+    
+    loop for each row
+        loop for each col
+            alt r == 0 || r == rows - 1 || c == 0 || c == cols - 1
+                Grid -> Grid : grid[r][c] = 'X'
+            else
+                Grid -> Grid : grid[r][c] = '.'
+            end
+        end
+    end
+    
+    Grid -> Grid : grid[lignePerso][colonnePerso] = 'P'
+    Grid -> Grid : grid[ligneEchelle][colonneEchelle] = 'E'
+
+    loop nbrMur < maxMurs
+        LG -> LG : r = rand.nextInt(rows - 2) + 1
+        LG -> LG : c = rand.nextInt(cols - 2) + 1
+        alt grid[r][c] == '.'
+            Grid -> Grid : grid[r][c] = 'X'
+            LG -> LG : nbrMur++
+        end
+    end
+    
+    loop nbrMonstre < monstreMax
+        LG -> LG : r = rand.nextInt(rows - 2) + 1
+        LG -> LG : c = rand.nextInt(cols - 2) + 1
+        alt grid[r][c] == '.'
+            Grid -> Grid : grid[r][c] = 'M'
+            LG -> LG : nbrMonstre++
+        end
+    end
+    
+    LG -> LG : placeAmulette(grid, rand, rows, cols)
+    LG -> LG : placeAmulette(grid, rand, rows, cols)
+    
+    loop for each row
+        loop for each col
+            SB -> SB : append(grid[r][c])
+        end
+        SB -> SB : append('\n')
+    end
+    SB -> SB : append('\n')
+    LG -> LG : labys[etage] = sb.toString()
+    
+    LG -> LG : lignePerso = ligneEchelle
+    LG -> LG : colonnePerso = colonneEchelle
+    
+    LG -> LG : ligneEchelle = rand.nextInt(rows - 2) + 1
+    LG -> LG : colonneEchelle = rand.nextInt(cols - 2) + 1
+    
+    alt lignePerso == ligneEchelle && colonnePerso == colonneEchelle
+        LG -> LG : ligneEchelle = rand.nextInt(rows - 2) + 1
+        LG -> LG : colonneEchelle = rand.nextInt(cols - 2) + 1
+    end
+
+    deactivate SB
+end
+
+return labys
+
+deactivate LG
+
+@enduml
