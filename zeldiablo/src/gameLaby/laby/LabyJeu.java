@@ -42,12 +42,21 @@ public class LabyJeu implements Jeu {
         if (clavier.droite) {
             this.labyrinthe.getPj().deplacerPerso(Labyrinthe.DROITE);
         }
-        if(clavier.attaque){
-            final Combat combat=new Combat(labyrinthe);
+        if (clavier.attaque) {
+            Combat combat = new Combat(labyrinthe);
             combat.joueurAttaque();
+        }
 
+        if (this.labyrinthe.tousLesMonstresSontMorts()) {
+            this.labyrinthe.supprimerMursInternes();
+        }
+
+        if (this.labyrinthe.getPj().getPointsDeVie() <= 0) {
+            gameOver();
         }
     }
+
+
 
     @Override
     public void init() {

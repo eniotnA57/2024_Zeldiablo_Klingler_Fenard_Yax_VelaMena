@@ -10,6 +10,7 @@ public class LabyGeneration {
     static int colonne = MainLaby.colonne;
     static int ligne = MainLaby.ligne;
 
+    // Initialiser monstreMax pour le premier étage
     static int monstreMax = (int) Math.sqrt((double) (MainLaby.colonne * MainLaby.ligne) / 2);
     static int maxMurs = (int) Math.sqrt((double) (MainLaby.colonne * MainLaby.ligne) * MainLaby.colonne / 10);
 
@@ -104,6 +105,9 @@ public class LabyGeneration {
                 ligneEchelle = rand.nextInt(rows - 2) + 1;
                 colonneEchelle = rand.nextInt(cols - 2) + 1;
             }
+
+            // Ajouter un monstre supplémentaire pour le prochain étage
+            monstreMax++;
         }
         return labys;
     }
