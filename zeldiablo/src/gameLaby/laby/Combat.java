@@ -42,7 +42,7 @@ public class Combat {
                 if (!monstre.isAlive()) {
                     monstresToRemove.add(monstre);
                     System.out.println("Un monstre a été tué!");
-                    if (Math.random() > 0.6666) {
+                    if (Math.random() > 0.5) {
                         System.out.println("Le héros récupère 2 points de vie");
                         labyrinthe.pj.takeDamage(-2);
                     }
