@@ -1,12 +1,7 @@
 bilan 
 
-<<<<<<< HEAD
-Pour la génération automatique de Labyrinthe:
-=======
-bah je sais pas trop ce qui a été modifié, pour la génération automatique des laby c'est labyrinthe et une nvl classe LabyGeneration, et pour les amulettes c'est nvl classe Amulette et labydessin, et personnage, sinon j'ai rajouté une autre classe pour mettre de la musique, mais bon c'est du bonus et ça n'a rien à voir avec les fonctionnalités proposées donc je vois pas l'intérêt de le mentionner
-
 pour la génération automatique de Labyrinthe:
->>>>>>> 571ce0b9c871700d4eb6c8b4f80157dc1d0eacf2
+
 
 -création d'une nouvelle classe LabyGeneration
 	.ajout méthode genererLabyrinthe()
@@ -17,10 +12,7 @@ pour les amulettes:
 -crétion d'une nouvelle classe Amulette:
 	.ajout méthode récupérerAmulette
 
-<<<<<<< HEAD
 Ajout graphisme :
 
 - Ajout sprite pour combat : boule de feu
 
-=======
->>>>>>> 571ce0b9c871700d4eb6c8b4f80157dc1d0eacf2
