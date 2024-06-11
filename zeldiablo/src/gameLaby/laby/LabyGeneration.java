@@ -10,6 +10,7 @@ public class LabyGeneration {
     static int colonne = MainLaby.colonne;
     static int ligne = MainLaby.ligne;
 
+    // Initialiser monstreMax pour le premier étage
     static int monstreMax = (int) Math.sqrt((double) (MainLaby.colonne * MainLaby.ligne) / 2);
     static int maxMurs = (int) Math.sqrt((double) (MainLaby.colonne * MainLaby.ligne) * MainLaby.colonne / 10);
 
@@ -31,32 +32,25 @@ public class LabyGeneration {
             maxMurs = (int) colonne * ligne / 2;
         }
 
-        // Generer des coordonnées pour le perso et pour l'échelle
         int lignePerso = rand.nextInt(rows - 2) + 1;
         int colonnePerso = rand.nextInt(cols - 2) + 1;
         int ligneEchelle = rand.nextInt(rows - 2) + 1;
         int colonneEchelle = rand.nextInt(cols - 2) + 1;
 
-        // Assure que P et E n'ont pas les mêmes coordonnées
         while (lignePerso == ligneEchelle && colonnePerso == colonneEchelle) {
             ligneEchelle = rand.nextInt(rows - 2) + 1;
             colonneEchelle = rand.nextInt(cols - 2) + 1;
         }
-
-        // Generation du labyrinthe
         for (int etage = 0; etage < etages; etage++) {
             StringBuilder laby = new StringBuilder();
             laby.append(rows).append("\n");
             laby.append(cols).append("\n");
 
-            // Compteur de monstre et de murs
             int nbrMonstre = 0;
             int nbrMur = 0;
 
-            // Création du labyrinthe vide
             char[][] grid = new char[rows][cols];
 
-            // Placement des murs sur les bords
             for (int r = 0; r < rows; r++) {
                 for (int c = 0; c < cols; c++) {
                     if (r == 0 || r == rows - 1 || c == 0 || c == cols - 1) {
@@ -67,11 +61,9 @@ public class LabyGeneration {
                 }
             }
 
-            // Placement du personnage et de l'échelle
             grid[lignePerso][colonnePerso] = 'P';
             grid[ligneEchelle][colonneEchelle] = 'E';
 
-            // Placement des murs internes
             while (nbrMur < maxMurs) {
                 int r = rand.nextInt(rows - 2) + 1;
                 int c = rand.nextInt(cols - 2) + 1;
@@ -81,7 +73,6 @@ public class LabyGeneration {
                 }
             }
 
-            // Placement des monstres
             while (nbrMonstre < monstreMax) {
                 int r = rand.nextInt(rows - 2) + 1;
                 int c = rand.nextInt(cols - 2) + 1;
@@ -91,11 +82,9 @@ public class LabyGeneration {
                 }
             }
 
-            // Placement des amulettes
             placeAmulette(grid, rand, rows, cols);
             placeAmulette(grid, rand, rows, cols);
 
-            // Construction de la chaîne de caractères du labyrinthe
             for (int r = 0; r < rows; r++) {
                 for (int c = 0; c < cols; c++) {
                     laby.append(grid[r][c]);
@@ -105,11 +94,9 @@ public class LabyGeneration {
             laby.append('\n');
             labys[etage] = laby.toString();
 
-            // Mise à jour des coordonnées précédentes de l'échelle en nouvelles coordonnées du perso
             lignePerso = ligneEchelle;
             colonnePerso = colonneEchelle;
 
-            // Génération de nouvelles coordonnées
             ligneEchelle = rand.nextInt(rows - 2) + 1;
             colonneEchelle = rand.nextInt(cols - 2) + 1;
 
@@ -118,6 +105,9 @@ public class LabyGeneration {
                 ligneEchelle = rand.nextInt(rows - 2) + 1;
                 colonneEchelle = rand.nextInt(cols - 2) + 1;
             }
+
+            // Ajouter un monstre supplémentaire pour le prochain étage
+            monstreMax++;
         }
         return labys;
     }

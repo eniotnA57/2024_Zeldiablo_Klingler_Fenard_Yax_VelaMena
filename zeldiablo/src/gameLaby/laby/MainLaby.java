@@ -3,9 +3,9 @@ package gameLaby.laby;
 import moteurJeu.MoteurJeu;
 
 public class MainLaby {
-    public static final int colonne = 30;
+    public static final int colonne = 25;
     public static final int ligne = 15;
-    public static final int etages = 20;
+    public static final int etages = 5;
     private static MusicPlayer musicPlayer;
 
     public static void main(String[] args) {

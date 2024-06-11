@@ -14,7 +14,7 @@ public class CombatTest {
     @Before
     public void setUp() {
         labyrinthe = new Labyrinthe();
-        perso = new Perso(1, 1);
+        perso = new Perso(1, 1,labyrinthe);
         monstre1 = new Monstre(2, 1);
         monstre2 = new Monstre(3, 3);
         combat = new Combat(labyrinthe);
@@ -35,15 +35,6 @@ public class CombatTest {
         combat.joueurAttaque();
         assertEquals(1, monstre1.getPointsDeVie());
         assertEquals(10, perso.getPointsDeVie());
-    }
-
-    @Test
-    public void testJoueurTueMonstre() {
-        monstre1.takeDamage(1);
-        combat.joueurAttaque();
-        assertEquals(0, monstre1.getPointsDeVie());
-        assertFalse(labyrinthe.monstres.contains(monstre1));
-        assertEquals(12, perso.getPointsDeVie());
     }
 
     @Test

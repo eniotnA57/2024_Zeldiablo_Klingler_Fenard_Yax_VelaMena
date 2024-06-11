@@ -55,6 +55,10 @@ public class Labyrinthe {
         }
     }
 
+    public Labyrinthe(String labyString) throws IOException {
+        chargerLaby(labyString);
+    }
+
     /**
      * Constructeur avec des fichiers de labyrinthe spécifiques.
      * @param labyFiles Tableau de chaînes représentant les niveaux du labyrinthe.
@@ -269,5 +273,29 @@ public class Labyrinthe {
      */
     public Perso getPj() {
         return pj;
+    }
+
+    /**
+     * Test si les monstres sont morts
+     * @return true ou false
+     */
+    public boolean tousLesMonstresSontMorts() {
+        for (Monstre monstre : monstres) {
+            if (monstre.isAlive()) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Méthode supprimer les murs internes
+     */
+    public void supprimerMursInternes() {
+        for (int x = 1; x < murs.length - 1; x++) {
+            for (int y = 1; y < murs[x].length - 1; y++) {
+                murs[x][y] = false;
+            }
+        }
     }
 }
