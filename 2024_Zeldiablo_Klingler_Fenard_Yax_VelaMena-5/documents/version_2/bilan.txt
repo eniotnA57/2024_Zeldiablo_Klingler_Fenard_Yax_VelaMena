@@ -1,0 +1,18 @@
+Pour implémenter un monstre ainsi que ses déplacements aléatoires, nous avons réalisé les tâches suivantes :
+
+Classe Monstre (élaborée par Dorian) :
+
+Cette classe gère les coordonnées X et Y du monstre, et permet de déplacer le monstre dans le labyrinthe.
+Classe Entite (élaborée par Cyril) :
+
+Une classe de base abstraite servant de parent pour Monstre et d'autres entités potentielles. Elle encapsule les coordonnées X et Y et fournit des méthodes pour accéder et modifier ces coordonnées.
+Modification de la classe Labyrinthe (faite par Antoine) :
+
+Nous avons adapté la classe pour interpréter le caractère 'M' comme un monstre lors de la lecture du fichier de labyrinthe.
+Implémentation des mouvements aléatoires du monstre, en veillant à ce qu'il évite les murs et ne puisse pas occuper la même case que le personnage.
+Modification de la classe LabyDessin (faite par Emma) :
+
+Ajout de la logique pour dessiner le monstre en violet sur le canvas. Cela permet de visualiser le monstre à sa position actuelle dans le labyrinthe pendant l'exécution du programme.
+Mise à jour des fichiers de labyrinthe :
+
+Ajout du caractère 'M' dans les fichiers de labyrinthe existants, afin de placer le monstre à des positions initiales spécifiques conformément aux nouvelles fonctionnalités implémentées.

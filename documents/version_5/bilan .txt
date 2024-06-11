@@ -1,0 +1,9 @@
+bilan 
+
+-ajout de la classe combat 
+	.ajout de la méthode monstreAttaque()
+	.ajout de la méthode joueurAttaque()
+	.ajout de la méthode isAdjacent()
+-modification de la classe Monstre 
+	.ajout de la méthode isAlive()	
+

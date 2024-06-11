@@ -6,6 +6,7 @@ public class Clavier {
 
 
     public boolean haut, bas, gauche, droite,attaque;
+    public boolean casserMur;
 
 
     public void appuyerTouche(KeyEvent event) {
@@ -54,8 +55,6 @@ public class Clavier {
             case SPACE:
                 this.attaque = true;
                 break;
-
-
         }
 
     }

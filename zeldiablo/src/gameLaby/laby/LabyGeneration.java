@@ -122,13 +122,6 @@ public class LabyGeneration {
         return labys;
     }
 
-    /**
-     * Place une amulette à une position aléatoire dans la grille.
-     * @param grid La grille du labyrinthe.
-     * @param rand L'objet Random pour générer des positions aléatoires.
-     * @param rows Le nombre de lignes de la grille.
-     * @param cols Le nombre de colonnes de la grille.
-     */
     private static void placeAmulette(char[][] grid, Random rand, int rows, int cols) {
         int r, c;
         do {
@@ -138,10 +131,6 @@ public class LabyGeneration {
         grid[r][c] = 'A';
     }
 
-    /**
-     * Méthode principale pour tester la génération de labyrinthes.
-     * @param args Arguments de la ligne de commande.
-     */
     public static void main(String[] args) {
         int rows = 10;
         int cols = 10;

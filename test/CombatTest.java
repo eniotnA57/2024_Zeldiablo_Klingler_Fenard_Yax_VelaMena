@@ -13,10 +13,12 @@ public class CombatTest {
 
     @Before
     public void setUp() {
-        labyrinthe = new Labyrinthe();  // Assurez-vous que cela initialise correctement le labyrinthe
+        // Initialisation du labyrinthe et des personnages
+        labyrinthe = new Labyrinthe();
         perso = new Perso(1, 1, labyrinthe);  // Inclure une référence à Labyrinthe dans le constructeur de Perso
         monstre1 = new Monstre(2, 1, labyrinthe);  // Inclure une référence à Labyrinthe dans le constructeur de Monstre
         monstre2 = new Monstre(3, 3, labyrinthe);
+
         combat = new Combat(labyrinthe);
         labyrinthe.pj = perso;
         labyrinthe.monstres = new ArrayList<>();

@@ -9,14 +9,14 @@ public class Monstre extends Entite {
 
     /**
      * Constructeur de la classe Monstre.
-     *
-     * @param dx         Position x initiale du monstre.
-     * @param dy         Position y initiale du monstre.
-     * @param labyrinthe
+     * @param dx Position x initiale du monstre.
+     * @param dy Position y initiale du monstre.
+     * @param laby Le labyrinthe associé.
      */
-    public Monstre(int dx, int dy, Labyrinthe labyrinthe) {
+    public Monstre(int dx, int dy, Labyrinthe laby) {
         super(dx, dy);
         this.pointsDeVie = 2;
+        this.laby = laby;
     }
 
     /**
@@ -33,7 +33,7 @@ public class Monstre extends Entite {
      */
     public void takeDamage(int damage) {
         this.pointsDeVie -= damage;
-        System.out.println("Monstre blessé, points de vie restants : " + this.pointsDeVie);
+        System.out.println("Le monstre a maintenant " + this.pointsDeVie + " points de vie.");
     }
 
     /**
@@ -46,31 +46,15 @@ public class Monstre extends Entite {
 
     /**
      * Déplace le monstre dans la direction spécifiée.
+     * @param action La direction dans laquelle déplacer le monstre (HAUT, BAS, GAUCHE, DROITE).
      */
-    public void deplacerMonstre(String direction) {
-        int[] suivante = Labyrinthe.getSuivant(this.x, this.y, direction);
-        if (suivante[0] >= 0 && suivante[0] < laby.getLength() && suivante[1] >= 0 && suivante[1] < laby.getLengthY()) {
-            if (!laby.getMur(suivante[0], suivante[1]) && !laby.estOccupe(suivante[0], suivante[1])) {
-                this.x = suivante[0];
-                this.y = suivante[1];
-            }
+    public void deplacerMonstre(String action) {
+        int[] courante = {this.x, this.y};
+        int[] suivante = Labyrinthe.getSuivant(courante[0], courante[1], action);
+
+        if (!laby.murs[suivante[0]][suivante[1]] && (laby.pj.x != suivante[0] || laby.pj.y != suivante[1]) && !laby.estOccupe(suivante[0], suivante[1])) {
+            this.x = suivante[0];
+            this.y = suivante[1];
         }
     }
-    public int getX() {
-        return x;
-    }
-
-    public void setX(int x) {
-        this.x = x;
-    }
-
-    public int getY() {
-        return y;
-    }
-
-    public void setY(int y) {
-        this.y = y;
-    }
-
-
 }

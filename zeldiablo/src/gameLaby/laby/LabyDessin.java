@@ -1,4 +1,3 @@
-
 package gameLaby.laby;
 
 import javafx.scene.canvas.Canvas;
@@ -90,9 +89,6 @@ public class LabyDessin implements DessinJeu {
             double monstrey = monstre.getY();
             imageMstr = new Image("gameLaby/image/dragon2.png");
             gc.drawImage(imageMstr, monstrex * TAILLE, monstrey * TAILLE, TAILLE, TAILLE);
-            if (monstrex - persoX == -1 && monstrey == persoY) {
-                imageMstr = new Image("gameLaby/image/dragon.png");
-            }
         }
 
         if (laby.getPj().isAttaqueEnCours()) {
@@ -131,7 +127,6 @@ public class LabyDessin implements DessinJeu {
             }
 
             laby.getPj().setAttaqueEnCours(false);
-
         }
     }
 }

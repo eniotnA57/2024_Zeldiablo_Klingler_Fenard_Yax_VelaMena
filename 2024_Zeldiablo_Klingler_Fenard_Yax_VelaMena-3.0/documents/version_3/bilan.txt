@@ -1,0 +1,11 @@
+classe Monstre :
+
+On avait deja créé au prealable la classe monstre que nous avons modifie afin qu'il ne se deplace uniquement quand le personnage bouge  :
+deplacement aléatoire
+
+classe Labyrinthe :
+
+ajouter un constructeur par défaut pour faire la fontionnalité "1.1 Création d'un labyrinthe par défaut"
+modification de la méthode deplacerPerso() pour eviter les collusions avec les murs et le monstre pour faire les fonctionnalités "1.2 Collision avec les Murs" et "3.1 Collision avec un monstre"
+
+et nous avons finalement adapter le diagramme de classe aux modifications et nous avons fait les diagrammes de séquences illustrant les méthodes modifiées.

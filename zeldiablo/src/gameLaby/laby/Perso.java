@@ -1,29 +1,28 @@
-
 package gameLaby.laby;
 
-/**
- * La classe Perso représente le personnage joueur dans le labyrinthe.
- */
 public class Perso {
     public int x;
     public int y;
     private int pointsDeVie;
-    private boolean attaqueEnCours; // Indicateur d'attaque
-    private String directionAttaque; // Direction de l'attaque
-    private Labyrinthe laby; // Ajouter cette ligne
+    private boolean attaqueEnCours;
+    private String directionAttaque;
+    private Labyrinthe laby;
 
-    // Modifier le constructeur pour accepter Labyrinthe
-    public Perso(int x, int y, Labyrinthe laby) {
-        this.x = x;
-        this.y = y;
+    public Perso(int dx, int dy, Labyrinthe laby) {
+        this.x = dx;
+        this.y = dy;
         this.pointsDeVie = 10;
         this.attaqueEnCours = false;
         this.directionAttaque = "";
         this.laby = laby;
     }
 
+    public boolean etrePresent(int dx, int dy) {
+        return (this.x == dx && this.y == dy);
+    }
+
     public int getX() {
-        return x;
+        return this.x;
     }
 
     public void setX(int x) {
@@ -31,7 +30,7 @@ public class Perso {
     }
 
     public int getY() {
-        return y;
+        return this.y;
     }
 
     public void setY(int y) {
@@ -39,7 +38,7 @@ public class Perso {
     }
 
     public int getPointsDeVie() {
-        return pointsDeVie;
+        return this.pointsDeVie;
     }
 
     public void setPointsDeVie(int pointsDeVie) {
@@ -70,53 +69,32 @@ public class Perso {
         this.directionAttaque = directionAttaque;
     }
 
-
-    /**
-     * Déplace le personnage dans la direction spécifiée.
-     * @param action La direction dans laquelle déplacer le personnage (HAUT, BAS, GAUCHE, DROITE).
-     */
     public void deplacerPerso(String action) {
         int[] suivante = Labyrinthe.getSuivant(this.x, this.y, action);
 
-        // Vérifie que la nouvelle position n'est ni un mur ni occupée
         if (!laby.getMur(suivante[0], suivante[1]) && !laby.estOccupe(suivante[0], suivante[1])) {
             this.x = suivante[0];
             this.y = suivante[1];
 
-            // Interaction avec les amulettes
             if (laby.getAmulette(suivante[0], suivante[1])) {
                 Amulette.recupererAmulette(laby);
-                laby.amulettes[suivante[0]][suivante[1]] = false;
+                laby.enleverAmulette(suivante[0], suivante[1]);
+                System.out.println("Amulette ramassée à (" + suivante[0] + ", " + suivante[1] + ")");
             }
 
-            // Interaction avec les escaliers
             if (laby.getEscalier(suivante[0], suivante[1])) {
                 laby.escalier.prendreEscalier(suivante[0], suivante[1]);
-                return;  // Arrête l'exécution si l'escalier est pris
+                return;
             }
         }
 
-        // Attaque ou déplace chaque monstre une seule fois
-        moveMonsters();
-    }
-
-    private void moveMonsters() {
         for (Monstre monstre : laby.monstres) {
             if (laby.estAdjacente(monstre.x, monstre.y, this.x, this.y)) {
                 laby.combat.monstreAttaque(monstre);
             } else {
-                // Choisit une action aléatoire parmi les directions possibles
                 String actionAleatoire = Labyrinthe.ACTIONS[laby.random.nextInt(Labyrinthe.ACTIONS.length)];
-                int[] newPos = Labyrinthe.getSuivant(monstre.x, monstre.y, actionAleatoire);
-                // S'assure que le mouvement est valide
-                if (newPos[0] >= 0 && newPos[0] < laby.getLength() && newPos[1] >= 0 && newPos[1] < laby.getLengthY()) {
-                    if (!laby.getMur(newPos[0], newPos[1]) && !laby.estOccupe(newPos[0], newPos[1])) {
-                        monstre.x = newPos[0];
-                        monstre.y = newPos[1];
-                    }
-                }
+                monstre.deplacerMonstre(actionAleatoire);
             }
         }
     }
- }
-
+}

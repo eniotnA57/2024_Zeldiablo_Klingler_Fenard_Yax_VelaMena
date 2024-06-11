@@ -53,6 +53,7 @@ public class MoteurJeu extends Application {
     @Override
     public void start(Stage primaryStage) {
         final Canvas canvas = new Canvas(WIDTH, HEIGHT);
+
         final Pane canvasContainer = new Pane(canvas);
         canvas.widthProperty().bind(canvasContainer.widthProperty());
         canvas.heightProperty().bind(canvasContainer.heightProperty());

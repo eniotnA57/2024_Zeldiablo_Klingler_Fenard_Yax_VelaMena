@@ -1,4 +1,3 @@
-
 package gameLaby.laby;
 
 import java.io.IOException;

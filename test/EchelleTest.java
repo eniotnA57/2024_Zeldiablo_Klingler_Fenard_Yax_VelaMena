@@ -47,8 +47,8 @@ public class EchelleTest {
 
         assertTrue("Le personnage devrait être placé sur une échelle pour le test", echellePlaced);
 
-        labyrinthe.deplacerPerso(Labyrinthe.DROITE);
-        labyrinthe.deplacerPerso(Labyrinthe.GAUCHE);
+        labyrinthe.pj.deplacerPerso(Labyrinthe.DROITE);
+        labyrinthe.pj.deplacerPerso(Labyrinthe.GAUCHE);
 
         assertEquals("Le personnage devrait être monté à l'étage supérieur",
                 1,labyrinthe.getCurrentLevel());
@@ -73,8 +73,8 @@ public class EchelleTest {
 
         assertTrue("Le personnage devrait être placé sur une échelle pour le test", echellePlaced);
 
-        labyrinthe.deplacerPerso(Labyrinthe.DROITE);
-        labyrinthe.deplacerPerso(Labyrinthe.GAUCHE);
+        labyrinthe.pj.deplacerPerso(Labyrinthe.DROITE);
+        labyrinthe.pj.deplacerPerso(Labyrinthe.GAUCHE);
         assertEquals("Le niveau suivant devrait être chargé", initialLevel + 1, labyrinthe.getCurrentLevel());
     }
 }

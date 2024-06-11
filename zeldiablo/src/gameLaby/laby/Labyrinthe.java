@@ -25,6 +25,7 @@ public class Labyrinthe {
 
     public Perso pj;
     public List<Monstre> monstres;
+
     public boolean[][] murs;
     public boolean[][] escaliers;
     public boolean[][] amulettes;
@@ -33,15 +34,13 @@ public class Labyrinthe {
     private String[] labyFiles;
     public Escalier escalier;
     public Combat combat;
-    private int currentLevel; // Niveau courant du labyrinthe
 
     private int savedHealth = 10;
 
     public Labyrinthe() {
         try {
             labyFiles = LabyGeneration.genererLabyrinthe(MainLaby.ligne, MainLaby.colonne, MainLaby.etages);
-            currentLevel = 0; // Initialiser le niveau courant
-            chargerLaby(labyFiles[currentLevel]);
+            chargerLaby(labyFiles[0]);
             this.escalier = new Escalier(this, labyFiles);
             this.combat = new Combat(this);
         } catch (IOException e) {
@@ -51,8 +50,7 @@ public class Labyrinthe {
 
     public Labyrinthe(String[] labyFiles) throws IOException {
         this.labyFiles = labyFiles;
-        currentLevel = 0; // Initialiser le niveau courant
-        chargerLaby(labyFiles[currentLevel]);
+        chargerLaby(labyFiles[0]);
         this.escalier = new Escalier(this, labyFiles);
         this.combat = new Combat(this);
     }
@@ -83,7 +81,7 @@ public class Labyrinthe {
     }
 
     public void chargerLaby(String laby) throws IOException {
-        savePlayerHealth(); // Sauvegarder les points de vie avant de charger le nouveau niveau
+        savePlayerHealth();
         BufferedReader bfRead = new BufferedReader(new StringReader(laby));
 
         int nbLignes = Integer.parseInt(bfRead.readLine());
@@ -162,8 +160,12 @@ public class Labyrinthe {
         return this.amulettes[x][y];
     }
 
+    public void enleverAmulette(int x, int y) {
+        this.amulettes[x][y] = false;
+    }
+
     public int getCurrentLevel() {
-        return currentLevel;
+        return escalier.getCurrentLevel();
     }
 
     public static int[] getSuivant(int x, int y, String action) {
@@ -193,30 +195,33 @@ public class Labyrinthe {
     public void deplacerPerso(String direction) {
         int[] newPosition = getSuivant(pj.getX(), pj.getY(), direction);
 
-        // Vérifier les limites du labyrinthe et les obstacles
         if (newPosition[0] >= 0 && newPosition[0] < getLength() && newPosition[1] >= 0 && newPosition[1] < getLengthY()) {
             if (escaliers[newPosition[0]][newPosition[1]]) {
-                monterEtage();
+                escalier.prendreEscalier(newPosition[0], newPosition[1]);
             } else if (!murs[newPosition[0]][newPosition[1]] && !estOccupe(newPosition[0], newPosition[1])) {
                 pj.setX(newPosition[0]);
                 pj.setY(newPosition[1]);
+
+                // Vérifiez et récupérez l'amulette s'il y en a une
+                if (amulettes[newPosition[0]][newPosition[1]]) {
+                    Amulette.recupererAmulette(this);
+                    enleverAmulette(newPosition[0], newPosition[1]);
+                    System.out.println("Amulette ramassée à (" + newPosition[0] + ", " + newPosition[1] + ")");
+                }
             }
         }
 
-        // Mettre à jour le combat après le déplacement
         updateCombat();
     }
 
-    private void monterEtage() {
-        if (currentLevel < labyFiles.length - 1) {
-            currentLevel++;
-            try {
-                chargerLaby(labyFiles[currentLevel]);
-            } catch (IOException e) {
-                e.printStackTrace();
+    public void deplacerMonstre(Monstre monstre, String direction) {
+        int[] newPosition = getSuivant(monstre.getX(), monstre.getY(), direction);
+
+        if (newPosition[0] >= 0 && newPosition[0] < getLength() && newPosition[1] >= 0 && newPosition[1] < getLengthY()) {
+            if (!murs[newPosition[0]][newPosition[1]] && !estOccupe(newPosition[0], newPosition[1])) {
+                monstre.setX(newPosition[0]);
+                monstre.setY(newPosition[1]);
             }
-        } else {
-            System.out.println("Vous avez atteint le dernier niveau !");
         }
     }
 
@@ -230,39 +235,13 @@ public class Labyrinthe {
             }
         }
 
-        // Exécute d'autres logiques de combat, par exemple, vérifier les attaques des monstres
         for (Monstre monstre : monstres) {
             if (estAdjacente(monstre.x, monstre.y, pj.getX(), pj.getY())) {
                 combat.monstreAttaque(monstre);
             } else {
                 String actionAleatoire = ACTIONS[random.nextInt(ACTIONS.length)];
-                monstre.deplacerMonstre(actionAleatoire);
+                deplacerMonstre(monstre, actionAleatoire);
             }
-        }
-    }
-
-
-    // Dans la classe Labyrinthe
-
-    public void deplacerMonstre(Monstre monstre, int direction) {
-        int newX = monstre.getX();
-        int newY = monstre.getY();
-
-        switch (direction) {
-            case 0:
-                newX--;
-                break;
-            case 1:
-                newX++;
-                break;
-            case 2:
-                newY--;
-                break;
-            case 3:
-                newY++;
-                break;
-            default:
-                break;
         }
     }
 }

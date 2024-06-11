@@ -4,18 +4,33 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Gère les combats entre le joueur et les monstres dans le labyrinthe.
+ */
 public class Combat {
+
     private Labyrinthe labyrinthe;
 
+    /**
+     * Constructeur de la classe Combat.
+     * @param labyrinthe Le labyrinthe où les combats ont lieu.
+     */
     public Combat(Labyrinthe labyrinthe) {
         this.labyrinthe = labyrinthe;
     }
 
+    /**
+     * Fait attaquer un monstre au joueur.
+     * @param monstre Le monstre qui attaque.
+     */
     public void monstreAttaque(Monstre monstre) {
         labyrinthe.pj.takeDamage(1);
         System.out.println("Le monstre attaque! Le héros perd 1 point de vie.");
     }
 
+    /**
+     * Fait attaquer le joueur aux monstres adjacents.
+     */
     public void joueurAttaque() {
         boolean attacked = false;
         List<Monstre> monstresToRemove = new ArrayList<>();

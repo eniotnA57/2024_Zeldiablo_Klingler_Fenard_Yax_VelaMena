@@ -1,4 +1,3 @@
-
 package gameLaby.laby;
 
 import javax.sound.sampled.*;

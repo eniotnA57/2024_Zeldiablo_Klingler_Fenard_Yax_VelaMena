@@ -31,27 +31,25 @@ public class LabyJeu implements Jeu {
     @Override
     public void update(double deltaTime, Clavier clavier) {
         if (clavier.haut) {
-            this.labyrinthe.getPj().deplacerPerso(Labyrinthe.HAUT);
+            this.labyrinthe.deplacerPerso(Labyrinthe.HAUT);
         }
         if (clavier.bas) {
-            this.labyrinthe.getPj().deplacerPerso(Labyrinthe.BAS);
+            this.labyrinthe.deplacerPerso(Labyrinthe.BAS);
         }
         if (clavier.gauche) {
-            this.labyrinthe.getPj().deplacerPerso(Labyrinthe.GAUCHE);
+            this.labyrinthe.deplacerPerso(Labyrinthe.GAUCHE);
         }
         if (clavier.droite) {
-            this.labyrinthe.getPj().deplacerPerso(Labyrinthe.DROITE);
+            this.labyrinthe.deplacerPerso(Labyrinthe.DROITE);
         }
-        if (clavier.attaque) {
-            final Combat combat = new Combat(this.labyrinthe);
-            combat.joueurAttaque();
+        if(clavier.attaque){
+            this.labyrinthe.combat.joueurAttaque();
         }
     }
 
-
     @Override
     public void init() {
-//pas besoin
+        // Pas besoin
     }
 
     @Override
@@ -75,4 +73,3 @@ public class LabyJeu implements Jeu {
         }
     }
 }
-
