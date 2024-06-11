@@ -1,0 +1,120 @@
+deuxiemeItération
+
+fonctionnalités 1.1 
+
+
+@startuml
+
+title création d'un labyrinthe
+
+participant "mainLaby:main" as mainLaby
+participant "Labyrinthe:l" as labyrinthe
+participant "labydessin:ld" as labydessin
+participant " perso:p" as perso
+participant "monstre:m" as monstre
+
+    activate mainLaby
+    mainLaby -> Labyrinthe : getlabyrinthe (String)
+    activate Labyrinthe
+    mainLaby <-- Labyrinthe : filereader
+    deactivate Labyrinthe
+
+    mainLaby -> labydessin : dessinerJeu (jeu, canvas)
+    activate labydessin
+    labydessin -> perso : getperso(Personnage)
+    activate perso
+    labydessin <-- perso : perso(p)
+    deactivate perso
+    labydessin -> monstre : getmonstre(Monstre)
+    activate monstre
+    labydessin <-- monstre : monstre(m)
+    deactivate monstre
+    mainLaby <-- labydessin : dessin
+    deactivate labydessin
+    deactivate mainLaby
+
+@enduml
+
+
+
+
+fonctionnalités 1.2 et 3.1 diag de sequence :
+
+@startuml
+actor Joueur
+participant Labyrinthe
+participant Perso as pj
+participant Monstre as monstre
+
+Joueur -> Labyrinthe: deplacerPerso(action)
+activate Labyrinthe
+
+Labyrinthe -> pj: obtenir position actuelle
+pj -> Labyrinthe: retourne (pj.x, pj.y)
+
+Labyrinthe -> Labyrinthe: getSuivant(courante[0], courante[1], action)
+Labyrinthe -> Labyrinthe: retourne suivante(x, y)
+
+alt !murs[suivante[0]][suivante[1]] et !(monstre.x == suivante[0] && monstre.y == suivante[1])
+    Labyrinthe -> pj: mettre à jour position (suivante[0], suivante[1])
+
+end
+
+pj -> Labyrinthe
+
+deactivate Labyrinthe
+@enduml
+
+diagramme de classe de l'itération :
+
+@startuml
+
+class Labyrinthe {
+
+-murs :boolean[][] 
+-pj: Perso 
+-monstre :Monstre 
+-random :Random 
++ static final MUR: char 
++ static final PJ: char 
++ static final MONSTRE: char 
++ static final VIDE: char 
++ static final HAUT: String 
++ static final BAS: String 
++ static final GAUCHE: String 
++ static final DROITE: String 
++ static final ACTIONS: String[] 
++ Labyrinthe(String nom)
+<color:Red>+ Labyrinthe()</color>
+<color:Red>+ deplacerPerso(String action):</color>
++ deplacerMonstre(String action):
++ etreFini(): boolean 
++ getLengthY():int 
++ getLength():int 
++ getMur(int x, int y): boolean 
++ static getSuivant(int x, int y, String action): Labyrinthe 
++ deplacerMonstre():
+}
+
+class Monstre {
+  + Monstre(int dx, int dy)
+}
+
+class Perso {
+  + int x
+  + int y
+  + Perso(int x, int y)
+  + int getX()
+  + int getY()
+}
+
+class LabyJeu {
++ LabyJeu (String nom)
++ LabyJeu ()
++ getLabyrinthe() : Labyrinthe 
+}
+
+Labyrinthe "1" -- "1" Monstre : monstre
+Labyrinthe "1" -- "1" Perso : pj
+@enduml
+

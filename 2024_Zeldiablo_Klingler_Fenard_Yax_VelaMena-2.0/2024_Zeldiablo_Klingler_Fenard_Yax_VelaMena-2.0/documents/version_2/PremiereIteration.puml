@@ -1,0 +1,47 @@
+@startuml
+
+class Labyrinthe {
+  - boolean[][] murs
+  - Perso pj
+  - Monstre monstre
+  - Random random
+  + static final char MUR
+  + static final char PJ
+  + static final char MONSTRE
+  + static final char VIDE
+  + static final String HAUT
+  + static final String BAS
+  + static final String GAUCHE
+  + static final String DROITE
+  + static final String[] ACTIONS
+  + Labyrinthe(String nom)
+  + void deplacerPerso(String action)
+  + void deplacerMonstre(String action)
+  + boolean etreFini()
+  + int getLengthY()
+  + int getLength()
+  + boolean getMur(int x, int y)
+  + static int[] getSuivant(int x, int y, String action)
+  - void deplacerMonstre()
+}
+
+class Monstre {
+  + Monstre(int dx, int dy)
+}
+
+class Perso {
+  + int x
+  + int y
+  + Perso(int x, int y)
+  + int getX()
+  + int getY()
+}
+
+class LabyJeu {
+  + Labyrinthe getLabyrinthe()
+}
+
+Labyrinthe "1" -- "1" Monstre : monstre
+Labyrinthe "1" -- "1" Perso : pj
+
+@enduml
